@@ -53,8 +53,8 @@ class BiRNN(nn.Module):
         # Forward propagate LSTM
         out, _ = self.lstm(x, (h0, c0))  # out: tensor of shape (batch_size, seq_length, hidden_size*2)
         
-        # Decode the hidden state of the last time step
-        out = self.fc(out[:, -1, :])
+        # Decode the hidden state of the last/first time step for the forward/backward direction
+        out = self.fc(out[:, -1, :]) + self.fc(out[:, 0, :])
         return out
 
 model = BiRNN(input_size, hidden_size, num_layers, num_classes).to(device)
